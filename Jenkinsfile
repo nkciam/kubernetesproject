@@ -1,7 +1,26 @@
-cd /opt
-docker image build -t $JOB_NAME:v1.$BUILD_ID
-docker image tag $JOB_NAME:v1.$BUILD_ID nkciam/$JOB_NAME:v1.$BUILD_ID 
-docker image tag $JOB_NAME:v1.$BUILD_ID nkciam/$JOB_NAME:latest
-docker image push nkciam/$JOB_NAME:v1.$BUILD_ID
-docker image push nkciam/$JOB_NAME:latest
-docker image rmi $JOB_NAME:v1.$BUILD_ID nkciam/$JOB_NAME:v1.$BUILD_ID nkciam/$JOB_NAME:latest
+node {
+
+    stage("Git Clone"){
+
+        git credentialsId: 'GIT_HUB_CREDENTIALS', url: ''
+    }
+
+    stage("Docker build"){
+        sh 'docker version'
+        sh 'docker build -t chung-docker-demo .'
+        sh 'docker image list'
+        sh 'docker tag chung-docker-demo nkciam/chungnk:chung-docker-demo'
+    }
+
+    withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'PASSWORD')]) {
+        sh 'docker login -u nkciam -p $PASSWORD'
+    }
+
+    stage("Push Image to Docker Hub"){
+        sh 'docker push nkciam/chungnk:chung-docker-demo'
+    }
+    
+    stage("kubernetes deployment"){
+        sh 'kubectl apply -f k8s-spring-boot-deployment.yml'
+    }
+} 
