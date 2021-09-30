@@ -1,5 +1,6 @@
 FROM centos:latest
 MAINTAINER chung,daiangclubs@gmail.com
+RUN sudo su -
 RUN apt update
 RUN apt install apache2
 RUN apt install zip
