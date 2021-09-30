@@ -1,6 +1,7 @@
 FROM centos:latest
 MAINTAINER chung,daiangclubs@gmail.com
-RUN sudo apt install apache2
+RUN apt update
+RUN apt install apache2
   zip \
  unzip
 ADD https://www.free-css.com/assets/files/free-css-templates/download/page258/loxury.zip /var/www/html/
