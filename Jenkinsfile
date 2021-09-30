@@ -2,7 +2,7 @@ node {
 
     stage("Git Clone"){
 
-        git credentialsId: 'GIT_HUB_CREDENTIALS', url: 'https://github.com/nkciam/kubernetesproject.git'
+        git branch 'main', credentialsId: 'GIT_HUB_CREDENTIALS', url: 'https://github.com/nkciam/kubernetesproject.git'
     }
 
     stage("Docker build"){
